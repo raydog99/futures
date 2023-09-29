@@ -7,6 +7,6 @@ namespace rpc{
 		~client();
 
 		template <typename... Args>
-		void call(const std::string& funcName, Args... args);
+		std::string call(const std::string& funcName, Args... args);
 	};
 }

@@ -94,6 +94,61 @@ public:
     }
 }
 
+	static SocketImplFactory& getFactory() {
+        static SocketImplFactory factory;
+        return factory;
+    }
+
+    static void enqueueRequest(void* req) {
+        const bool PROFILE = false;
+        init();
+
+        if (PROFILE) {
+            std::cout << "enqueueRequest called" << std::endl;
+        }
+
+        if (dynamic_cast<TcpWriteRequest*>(req) ||
+            dynamic_cast<TcpConnectRequest*>(req) ||
+            dynamic_cast<TcpFlushRequest*>(req) ||
+            dynamic_cast<TcpCloseRequest*>(req)) {
+
+            try {
+                if (PROFILE) {
+                    std::cout << "write_sink enqueue" << std::endl;
+                }
+                write_sink.enqueue(req);
+                // Thread::currentThread().yield(); // TESTING
+                if (PROFILE) {
+                    std::cout << "write_sink enqueue done" << std::endl;
+                }
+            } catch (std::exception& se) {
+                std::cerr << "aSocketMgr.enqueueRequest: Warning: Got SinkException " << se.what() << std::endl;
+                std::cerr << "aSocketMgr.enqueueRequest: This is a bug - contact <mdw@cs.berkeley.edu>" << std::endl;
+            }
+
+        } else if (dynamic_cast<TcpStartReadRequest*>(req)) {
+
+            try {
+                read_sink.enqueue(req);
+            } catch (std::exception& se) {
+                std::cerr << "aSocketMgr.enqueueRequest: Warning: Got SinkException " << se.what() << std::endl;
+                std::cerr << "aSocketMgr.enqueueRequest: This is a bug - contact <mdw@cs.berkeley.edu>" << std::endl;
+            }
+
+            TcpStartReadRequest* srreq = dynamic_cast<TcpStartReadRequest*>(req);
+            // Handle srreq
+
+            read_handler.interruptSelect();
+
+        } else {
+            throw std::invalid_argument("Bad request type");
+        }
+
+        if (PROFILE) {
+            std::cout << "enqueueRequest done" << std::endl;
+        }
+    }
+
 private:
     static const bool DEBUG = false;
     static const bool PROFILE = false;

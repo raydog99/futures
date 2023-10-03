@@ -1,4 +1,3 @@
-#include <string>
 #include "async_io/aSocketStageWrapper.h"
 #include "async_io/aSocketEventHandler.h"
 #include "async_io/SelectSourceIF.h"
@@ -9,6 +8,8 @@
 #include "async_io/FiniteQueue.h"
 #include "async_io/QueueThresholdPredicate.h"
 #include "async_io/Stage.h"
+
+#include <string>
 
 using namespace root::include::async_io;
 using namespace root::include::rpc;

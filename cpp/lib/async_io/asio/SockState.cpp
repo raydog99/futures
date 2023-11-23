@@ -46,4 +46,14 @@ public:
     clogged_numtries = 0;
     if (DEBUG) std::cerr << "SockState " << nbsock << ": Const done" << std::endl;
   }
+
+  void readInit(SelectSource* read_selsource, SinkIF* compQ, int readClogTries) {
+    if (DEBUG) std::cerr << "readInit called on " << this << std::endl;
+    if (closed) return; // May have been closed already
+    this->read_selsource = dynamic_cast<SelectSource*>(read_selsource);
+    this->readCompQ = compQ;
+    this->readClogTries = readClogTries;
+    readsi = SelectItem(dynamic_cast<NonblockingSocket*>(nbsock), this, Selectable::READ_READY);
+    this->read_selsource->register(&readsi); 
+  }
 };

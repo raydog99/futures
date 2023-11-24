@@ -56,4 +56,9 @@ public:
     readsi = SelectItem(dynamic_cast<NonblockingSocket*>(nbsock), this, Selectable::READ_READY);
     this->read_selsource->register(&readsi); 
   }
+
+  void synchronizedReadInit(SelectSource* read_selsource, SinkIF* compQ, int readClogTries) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    readInit(read_selsource, compQ, readClogTries);
+  }
 };

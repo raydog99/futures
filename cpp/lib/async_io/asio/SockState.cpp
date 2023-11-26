@@ -61,4 +61,9 @@ public:
     std::lock_guard<std::mutex> lock(mutex_);
     readInit(read_selsource, compQ, readClogTries);
   }
+
+  void doRead() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    doReadInternal();
+  }
 };

@@ -66,4 +66,9 @@ public:
     std::lock_guard<std::mutex> lock(mutex_);
     doReadInternal();
   }
+
+  bool addWriteRequest(aSocketRequest* req, SelectSource* write_selsource) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    return addWriteRequestInternal(req, write_selsource);
+  }
 };

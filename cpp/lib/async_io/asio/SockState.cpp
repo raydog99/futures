@@ -71,4 +71,10 @@ public:
     std::lock_guard<std::mutex> lock(mutex_);
     return addWriteRequestInternal(req, write_selsource);
   }
+
+  void initWrite(ATcpWriteRequest* req) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    initWriteInternal(req);
+  }
+
 };

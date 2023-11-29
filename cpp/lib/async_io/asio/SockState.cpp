@@ -77,4 +77,8 @@ public:
     initWriteInternal(req);
   }
 
+  bool tryWrite() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    return tryWriteInternal();
+  }
 };

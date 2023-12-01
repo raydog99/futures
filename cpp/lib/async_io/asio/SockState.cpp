@@ -86,4 +86,9 @@ public:
     std::lock_guard<std::mutex> lock(mutex_);
     writeMaskEnableInternal();
   }
+
+  void writeMaskDisable() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    writeMaskDisableInternal();
+  }
 };

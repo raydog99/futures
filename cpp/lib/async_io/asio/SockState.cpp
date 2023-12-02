@@ -91,4 +91,10 @@ public:
     std::lock_guard<std::mutex> lock(mutex_);
     writeMaskDisableInternal();
   }
+
+  void close(SinkIF* closeEventQueue) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    closeInternal(closeEventQueue);
+  }
+
 };

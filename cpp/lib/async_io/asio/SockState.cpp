@@ -97,4 +97,27 @@ public:
     closeInternal(closeEventQueue);
   }
 
+  void doReadInternal() {
+  if (DEBUG) std::cerr << "SockState: doRead called" << std::endl;
+  if (closed) return;
+
+  if (clogged_qel != nullptr) {
+    if (DEBUG) std::cerr << "SockState: doRead draining clogged element " << clogged_qel << std::endl;
+    try {
+      readCompQ->enqueue(clogged_qel);
+      clogged_qel = nullptr;
+      clogged_numtries = 0;
+    } catch (SinkFullException& qfe) {
+      if ((readClogTries != -1) && (++clogged_numtries >= readClogTries)) {
+        if (DEBUG) std::cerr << "SockState: Warning: readClogTries exceeded, dropping " << clogged_qel << std::endl;
+        clogged_qel = nullptr;
+        clogged_numtries = 0;
+      } else {
+        return;
+      }
+    } catch (SinkException& sce) {
+      this->close(nullptr);
+    }
+  }
+  }
 };

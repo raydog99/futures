@@ -119,5 +119,23 @@ public:
       this->close(nullptr);
     }
   }
+
+  int len;
+
+  try {
+    if (DEBUG) std::cerr << "SockState: doRead trying read" << std::endl;
+    len = nbis->read(readBuf, 0, aSocketConst::READ_BUFFER_SIZE);
+    if (DEBUG) std::cerr << "SockState: read returned " << len << std::endl;
+
+    if (len == 0) {
+      // std::cerr << "ss.doRead: Warning: Got empty read on socket" << std::endl;
+      readsi.revents = 0;
+      return;
+    } else if (len < 0) {
+      if (DEBUG) std::cerr << "ss.doRead: read failed, sock closed" << std::endl;
+      this->close(readCompQ);
+      readsi.revents = 0;
+      return;
+    }
   }
 };

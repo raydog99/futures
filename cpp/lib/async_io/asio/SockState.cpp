@@ -137,5 +137,10 @@ public:
       readsi.revents = 0;
       return;
     }
+  } catch (std::exception& e) {
+    if (DEBUG) std::cerr << "ss.doRead: read got exception: " << e.what() << std::endl;
+    this->close(readCompQ);
+    readsi.revents = 0;
+    return;
   }
 };

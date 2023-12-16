@@ -50,4 +50,18 @@ public:
         if (PROFILE) tracer = Tracer("NBIO SelectSource <" + std::to_string(reinterpret_cast<std::intptr_t>(&selset)) + ">");
         if (do_balance) initBalancer();
     }
+
+    void register(Object selobj) override {
+        if (DEBUG) std::cerr << "SelectSource: register " << selobj << std::endl;
+        if (!(selobj instanceof SelectItem)) {
+            std::cerr << "register() called with non-SelectItem argument. Should not happen!!" << std::endl;
+            return;
+        }
+        selset.interruptSelect(); // blow it out of any select, unlock blocker.
+        SelectItem sel = static_cast<SelectItem*>(selobj);
+        selset.add(sel);
+        synchronized (blocker) {
+            blocker.notify();
+        }
+    }
 };

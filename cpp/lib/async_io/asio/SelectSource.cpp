@@ -64,4 +64,18 @@ public:
             blocker.notify();
         }
     }
+
+    void deregister(Object selobj) override {
+        if (DEBUG) std::cerr << "SelectSource: deregister " << selobj << std::endl;
+        if (!(selobj instanceof SelectItem)) {
+            std::cerr << "deregister() called with non-SelectItem argument. Should not happen!!" << std::endl;
+            return;
+        }
+        selset.interruptSelect(); // blow it out of any selects, unlock blocker
+        SelectItem sel = static_cast<SelectItem*>(selobj);
+        selset.remove(sel);
+        synchronized (blocker) {
+            blocker.notify();
+        }
+    };
 };

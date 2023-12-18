@@ -77,5 +77,17 @@ public:
         synchronized (blocker) {
             blocker.notify();
         }
-    };
+    }
+
+    int numRegistered() override {
+        return selset.size();
+    }
+
+    int numActive() override {
+        return selset.numActive();
+    }
+
+    int size() override {
+        return (ready_size - ready_offset);
+    }
 };

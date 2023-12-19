@@ -90,4 +90,14 @@ public:
     int size() override {
         return (ready_size - ready_offset);
     }
+
+    QueueElementIF* dequeue() override {
+        if (selset.size() == 0) return nullptr;
+
+        if ((ready_size == 0) || (ready_offset == ready_size)) {
+            doPoll(0);
+        }
+        if (ready_size == 0) return nullptr;
+        return new SelectQueueElement(ready[ready_offset++]);
+    }
 };

@@ -100,4 +100,18 @@ public:
         if (ready_size == 0) return nullptr;
         return new SelectQueueElement(ready[ready_offset++]);
     }
+
+    QueueElementIF** dequeue_all() override {
+        if (selset.size() == 0) return nullptr;
+
+        if ((ready_size == 0) || (ready_offset == ready_size)) {
+            doPoll(0);
+        }
+        if (ready_size == 0) return nullptr;
+        SelectQueueElement** ret = new SelectQueueElement*[ready_size - ready_offset];
+        for (int i = 0; i < ret.length; i++) {
+            ret[i] = new SelectQueueElement(ready[ready_offset++]);
+        }
+        return ret;
+    }
 };

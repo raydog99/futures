@@ -114,4 +114,24 @@ public:
         }
         return ret;
     }
+
+    QueueElementIF* blocking_dequeue(int timeout_millis) override {
+        if (selset.size() == 0) {
+            if (timeout_millis == 0) return nullptr;
+            // Wait for something to be registered
+            synchronized (blocker) {
+                if (timeout_millis == -1) {
+                    try {
+                        blocker.wait();
+                    } catch (InterruptedException ie) {
+                    }
+                } else {
+                    try {
+                        blocker.wait(timeout_millis);
+                    } catch (InterruptedException ie) {
+                    }
+                }
+            }
+        }
+    }
 };

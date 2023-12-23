@@ -140,4 +140,27 @@ public:
         if (ready_size == 0) return nullptr;
         return new SelectQueueElement(ready[ready_offset++]);
     }
+
+    QueueElementIF** blocking_dequeue_all(int timeout_millis) override {
+        if (selset.size() == 0) {
+            if (timeout_millis == 0) return nullptr;
+            // Wait for something to be registered
+            if (PROFILE) tracer.trace(" bdqa: blocking");
+            synchronized (blocker) {
+                if (timeout_millis == -1) {
+                    try {
+                        blocker.wait();
+                    } catch (InterruptedException ie) {
+                    }
+                } else {
+                    try {
+                        blocker.wait(timeout_millis);
+                    } catch (InterruptedException ie) {
+                    }
+                }
+            }
+            if (PROFILE) tracer.trace(" bdqa: done blocking");
+        }
+        return ret;
+    }
 };

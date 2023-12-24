@@ -161,6 +161,10 @@ public:
             }
             if (PROFILE) tracer.trace(" bdqa: done blocking");
         }
+        if ((ready_size == 0) || (ready_offset == ready_size)) {
+            doPoll(timeout_millis);
+        }
+        if (ready_size == 0) return nullptr;
         return ret;
     }
 };

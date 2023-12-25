@@ -165,6 +165,11 @@ public:
             doPoll(timeout_millis);
         }
         if (ready_size == 0) return nullptr;
+        int numtoret = std::min(ready_size - ready_offset, num);
+        SelectQueueElement** ret = new SelectQueueElement*[numtoret];
+        for (int i = 0; i < numtoret; i++) {
+            ret[i] = new SelectQueueElement(ready[ready_offset++]);
+        }
         return ret;
     }
 };

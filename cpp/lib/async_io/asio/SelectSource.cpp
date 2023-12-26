@@ -172,4 +172,14 @@ public:
         }
         return ret;
     }
+private:
+    void doPoll(int timeout) {
+        if (DEBUG) std::cerr << "SelectSource: Doing poll, timeout " << timeout << std::endl;
+        if (PROFILE) tracer.trace("doPoll called");
+        int c = selset.select(timeout);
+        if (DEBUG) std::cerr << "SelectSource: poll returned " << c << std::endl;
+        if (PROFILE) tracer.trace("select returned zero");
+        // Didn't get anything
+        ready = nullptr; ready_offset = ready_size = 0;
+    }
 };

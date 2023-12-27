@@ -181,5 +181,19 @@ private:
         if (PROFILE) tracer.trace("select returned zero");
         // Didn't get anything
         ready = nullptr; ready_offset = ready_size = 0;
+        if (c > 0) {
+            if (PROFILE) tracer.trace("select returned nonzero");
+            SelectItem* ret = selset.getEvents();
+            if (PROFILE) tracer.trace("getEvents() return");
+            if (ret != nullptr) {
+                // Likely necessary change: Ret !== nullptr if doPoll() is synchronized with 
+                // deregister()
+                ready_offset = 0; ready_size = ret.length;
+                if (PROFILE) tracer.trace("calling balance");
+                balance(ret);
+                if (PROFILE) tracer.trace("balance return");
+                return;
+            }
+        }
     }
 };

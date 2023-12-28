@@ -196,4 +196,13 @@ private:
             }
         }
     }
+
+    void initBalancer() {
+        balancer_seq = new int[BALANCER_SEQUENCE_SIZE];
+        std::srand(std::time(0)); // Need better seed?
+        for (int i = 0; i < BALANCER_SEQUENCE_SIZE; i++) {
+            balancer_seq[i] = std::abs(std::rand());
+        }
+        balancer_seq_off = 0;
+    }
 };

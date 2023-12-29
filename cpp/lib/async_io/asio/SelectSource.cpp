@@ -205,4 +205,9 @@ private:
         }
         balancer_seq_off = 0;
     }
+
+    void interruptSelect() {
+        if (DEBUG) std::cerr << "SelectSource.interruptSelect() called." << std::endl;
+        selset.interruptSelect();
+    }
 };

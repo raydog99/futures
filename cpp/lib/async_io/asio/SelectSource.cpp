@@ -195,6 +195,9 @@ private:
                 return;
             }
         }
+        if (PROFILE) tracer.trace("select returned zero");
+        // Didn't get anything
+        ready = nullptr; ready_offset = ready_size = 0;
     }
 
     void initBalancer() {

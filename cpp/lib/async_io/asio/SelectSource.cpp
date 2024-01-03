@@ -142,6 +142,7 @@ public:
     }
 
     QueueElementIF** blocking_dequeue_all(int timeout_millis) override {
+        if (PROFILE) tracer.trace("blocking_dequeue_all called");
         if (selset.size() == 0) {
             if (timeout_millis == 0) return nullptr;
             // Wait for something to be registered

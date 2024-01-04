@@ -202,6 +202,13 @@ private:
         ready = nullptr; ready_offset = ready_size = 0;
     }
 
+    void balance(SelectItem* selarr) {
+        if (DEBUG) std::cerr << "SelectSource: balance called, selarr size=" << selarr.length << std::endl;
+        if ((!do_balance) || (selarr.length < 2)) {
+            ready = selarr;
+        }
+    }
+
     void initBalancer() {
         balancer_seq = new int[BALANCER_SEQUENCE_SIZE];
         std::srand(std::time(0)); // Need better seed?

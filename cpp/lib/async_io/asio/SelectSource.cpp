@@ -206,6 +206,18 @@ private:
         if (DEBUG) std::cerr << "SelectSource: balance called, selarr size=" << selarr.length << std::endl;
         if ((!do_balance) || (selarr.length < 2)) {
             ready = selarr;
+        } else {
+            SelectItem a;
+            ready = new SelectItem[selarr.length];
+
+            for (int i = 0; i < ready.length; i++) {
+                if (balancer_seq_off == BALANCER_SEQUENCE_SIZE) {
+                    balancer_seq_off = 0;
+                }
+                int n = balancer_seq[balancer_seq_off++] % selarr.length;
+                int c = 0;
+                a = selarr[n]; selarr[n] = nullptr; ready[i] = a;
+            }
         }
     }
 

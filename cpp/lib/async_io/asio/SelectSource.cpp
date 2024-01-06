@@ -218,6 +218,16 @@ private:
                 int c = 0;
                 a = selarr[n]; selarr[n] = nullptr; ready[i] = a;
             }
+            while (selarr[n] == nullptr) {
+                    n++; c++;
+                    if (n == selarr.length) n = 0;
+                    if (c == selarr.length) {
+                        std::cerr << "WARNING: SelectSource.balance(): All items in selarr are null (n=" << n << ", c=" << c << ", len=" << selarr.length << std::endl;
+                        for (int k = 0; k < ready.length; k++) {
+                            std::cerr << "[" << k << "] ready:" << ready[k] << " selarr:" << selarr[k] << std::endl;
+                        }
+                    }
+                }
         }
     }
 

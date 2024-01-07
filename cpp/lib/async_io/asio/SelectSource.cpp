@@ -228,6 +228,7 @@ private:
                         }
                     }
                 }
+                if (DEBUG) std::cerr << "SelectSource: balance: " << n << "->" << i << std::endl;
         }
     }
 

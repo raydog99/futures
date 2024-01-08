@@ -229,6 +229,7 @@ private:
                     }
                 }
                 if (DEBUG) std::cerr << "SelectSource: balance: " << n << "->" << i << std::endl;
+                a = selarr[n]; selarr[n] = nullptr; ready[i] = a;
         }
     }
 

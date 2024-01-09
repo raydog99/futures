@@ -226,6 +226,7 @@ private:
                         for (int k = 0; k < ready.length; k++) {
                             std::cerr << "[" << k << "] ready:" << ready[k] << " selarr:" << selarr[k] << std::endl;
                         }
+                        throw std::invalid_argument("balance: All items in selarr are null!");
                     }
                 }
                 if (DEBUG) std::cerr << "SelectSource: balance: " << n << "->" << i << std::endl;

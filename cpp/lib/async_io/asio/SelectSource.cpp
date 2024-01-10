@@ -79,6 +79,10 @@ public:
         }
     }
 
+    void update() override {
+        selset.update();
+    }
+
     int numRegistered() override {
         return selset.size();
     }

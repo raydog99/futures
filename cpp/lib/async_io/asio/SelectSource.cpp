@@ -83,6 +83,14 @@ public:
         selset.update();
     }
 
+    void update(Object selobj) override {
+        if (!(selobj instanceof SelectItem)) {
+            std::cerr << "update() called with non-SelectItem argument. Should not happen!!" << std::endl;
+            return;
+        }
+        selset.update(static_cast<SelectItem*>(selobj));
+    }
+
     int numRegistered() override {
         return selset.size();
     }

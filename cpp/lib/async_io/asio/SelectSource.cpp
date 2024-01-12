@@ -153,6 +153,32 @@ public:
         return new SelectQueueElement(ready[ready_offset++]);
     }
 
+    QueueElementIF** blocking_dequeue(int timeout_millis, int num) override {
+        if (selset.size() == 0) {
+            if (timeout_millis == 0) return nullptr;
+            // Wait for something to be registered
+            synchronized (blocker) {
+                if (timeout_millis == -1) {
+                    try {
+                        blocker.wait();
+                    } catch (InterruptedException ie) {
+                    }
+                } else {
+                    try {
+                        blocker.wait(timeout_millis);
+                    } catch (InterruptedException ie) {
+                    }
+                }
+            }
+        }
+        int numtoret = std::min(ready_size - ready_offset, num);
+        SelectQueueElement** ret = new SelectQueueElement*[numtoret];
+        for (int i = 0; i < numtoret; i++) {
+            ret[i] = new SelectQueueElement(ready[ready_offset++]);
+        }
+        return ret;
+    }
+
     QueueElementIF** blocking_dequeue_all(int timeout_millis) override {
         if (PROFILE) tracer.trace("blocking_dequeue_all called");
         if (selset.size() == 0) {

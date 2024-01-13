@@ -171,6 +171,7 @@ public:
                 }
             }
         }
+        if (ready_size == 0) return nullptr;
         int numtoret = std::min(ready_size - ready_offset, num);
         SelectQueueElement** ret = new SelectQueueElement*[numtoret];
         for (int i = 0; i < numtoret; i++) {

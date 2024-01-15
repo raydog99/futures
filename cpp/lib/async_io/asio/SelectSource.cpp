@@ -127,6 +127,16 @@ public:
         return ret;
     }
 
+    QueueElementIF** dequeue(int num) override {
+        int numtoret = std::min(ready_size - ready_offset, num);
+
+        SelectQueueElement** ret = new SelectQueueElement*[numtoret];
+        for (int i = 0; i < numtoret; i++) {
+            ret[i] = new SelectQueueElement(ready[ready_offset++]);
+        }
+        return ret;
+    }
+
     QueueElementIF* blocking_dequeue(int timeout_millis) override {
         if (selset.size() == 0) {
             if (timeout_millis == 0) return nullptr;

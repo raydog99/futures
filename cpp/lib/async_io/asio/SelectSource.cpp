@@ -128,6 +128,8 @@ public:
     }
 
     QueueElementIF** dequeue(int num) override {
+        if (selset.size() == 0) return nullptr;
+
         if (ready_size == 0) return nullptr;
 
         int numtoret = std::min(ready_size - ready_offset, num);

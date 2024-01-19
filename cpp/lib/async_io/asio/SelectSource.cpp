@@ -120,7 +120,8 @@ public:
             doPoll(0);
         }
         if (ready_size == 0) return nullptr;
-        SelectQueueElement** ret = new SelectQueueElement*[ready_size - ready_offset];
+        int numtoret = std::min(ready_size - ready_offset, num);
+        SelectQueueElement** ret = new SelectQueueElement*[ready_size - numtoret];
         for (int i = 0; i < ret.length; i++) {
             ret[i] = new SelectQueueElement(ready[ready_offset++]);
         }

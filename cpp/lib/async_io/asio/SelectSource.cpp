@@ -226,12 +226,12 @@ public:
             doPoll(timeout_millis);
         }
         if (ready_size == 0) return nullptr;
-        if (PROFILE) tracer.trace(" bdqa: fill in ret[]");
         int numtoret = std::min(ready_size - ready_offset, num);
         SelectQueueElement** ret = new SelectQueueElement*[numtoret];
         for (int i = 0; i < numtoret; i++) {
             ret[i] = new SelectQueueElement(ready[ready_offset++]);
         }
+        if (PROFILE) tracer.trace(" bdqa: fill in ret[]");
         return ret;
     }
 private:

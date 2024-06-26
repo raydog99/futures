@@ -1,0 +1,5 @@
+# dune init proj futures
+# OCAMLPARAM: unset
+# Shared cache: disabled
+# Workspace root: /Users/raymonddeng/Desktop/github/futures/futures
+# Auto-detected concurrency: 8
